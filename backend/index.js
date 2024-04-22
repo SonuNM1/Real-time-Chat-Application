@@ -5,6 +5,8 @@ const dotenv = require("dotenv") ;
 const  connectDB = require('./config/database.js');
 const { connect } = require('mongoose');
 const userRouter = require("./routes/userRoute.js") ; 
+const messageRoute = require("./routes/messageRoute.js") ; 
+const cookieParser = require("cookie-parser") ; 
 
 dotenv.config() ; 
 
@@ -15,10 +17,14 @@ const PORT = process.env.PORT || 8080 ;
 // middleware
 
 app.use(express.json()) ; 
+app.use(cookieParser()) ; 
 
 // routes 
 
 app.use("/api/v1/user", userRouter) ; 
+app.use("/api/v1/message", messageRoute) ; 
+
+// app listening on
 
 app.listen(PORT, async ()=>{
     try{

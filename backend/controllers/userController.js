@@ -1,6 +1,6 @@
 
 const User = require('../models/userModel') ; 
-
+const jwt = require("jsonwebtoken") ; 
 const bcrypt = require("bcrypt") ; 
 
 // register
@@ -90,11 +90,57 @@ const login = async (req, res)=>{
             }) ; 
         }
 
+        // create an object contaiing user data to be included in the JWT payload
+
+        const tokenData = {
+            userId: user._id
+         } ;
         
+         // Generate a JSON Web Token (JWT) using the user data, a secret key, and an expiration day of 1 day
+
+        const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {expiresIn:'1d'});
+
+         // set the generated JWT as a cookie named "token" in the HTTP response
+
+        return res.status(200).cookie("token", token, {maxAge:1*24*60*60*1000, httpOnly: true, sameSite: 'strict'}).json({
+            _id:user._id , 
+            username: user.username,
+            fullName: user.fullName,
+            profilePhoto: user.profilePhoto
+        }) ; 
+
+         // maxAge -> specifies the max age of the cookie (in ms). Determines how long the cookie will remain valid before it expires
 
     } catch(error){
         console.log(error) ;   
     }
 }
 
-module.exports = {register} ; 
+// logout
+
+const logout = (req, res)=>{
+    try{
+        return res.status(200).cookie("token", "", {maxAge: 0}).json({
+            message: "Logged Out successfully"
+        })
+    } catch(error){
+        console.log(error) ; 
+    }
+}
+
+// show other users - retrieves other users excluding the currently logged-in user
+
+const getOtherUsers = async(req, res)=>{
+    try{
+        const loggedInUserId = req.id ; // extract the ID of the logged-in user from the req.
+
+        const otherUsers = await User.find({_id:{$ne:loggedInUserId}}).select("-password") ; // find other users excluding the logged-in user by querying the user collection. Select all fields except the "password" field for security reasons
+
+        return res.status(200).json(otherUsers) ; // sending a JSON response contaiing the retrieved other user's information
+
+    }catch(error){
+        console.log(error) ; 
+    }
+}
+
+module.exports = {register, login, logout, getOtherUsers} ; 
