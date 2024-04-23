@@ -54,16 +54,26 @@ const sendMessage = async (req, res)=>{
     }
 }
 
-// Receive message 
+// Receive messages between the logged-in user and a specified receiver
 
 const getMessage = async (req, res)=>{
     try{
-        const receiverId = req.params.id ; 
-        const senderId = req.id ; 
+        const receiverId = req.params.id ; // extract receiver Id from the req params
+        const senderId = req.id ; // extract sender id from the logged-in user
+
+        // find conversation between the sender and receiver
+
         const conversation = await Conversation.findOne({
             participants:{$all: [senderId, receiverId]}
         }).populate("messages") ; 
-        console.log(conversation.messages) ; 
+
+       // if conversation found, send messages as response 
+
+       if(conversation){
+        return res.status(200).json(conversation.messages) ; 
+       } else {
+        return res.status(200).json([]) ; // send empty array if conversation not found 
+       }
     }catch(error){
         console.log(error) ; 
     }
