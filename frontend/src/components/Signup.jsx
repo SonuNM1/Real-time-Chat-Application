@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import toast from "react-hot-toast"  
+import toast from "react-hot-toast" ; // for displaying notifications
 
 
 // Signup Component
 
 const Signup = () => {
+  // State for managing form data 
   const [user, setUser] = useState({
     fullName: "",
     username: "",
@@ -15,15 +16,20 @@ const Signup = () => {
     gender: "",
   });
 
-  const navigate = useNavigate() ; 
+  const navigate = useNavigate() ; // hook for navigation 
+
+  // function to handle checkbox selection for gender 
 
   const handleCheckbox = (gender) => {
     setUser({ ...user, gender: gender });
   };
 
+  // function to handle form submission 
+
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent default form submission 
     try {
+      // Send POST request to register user
       const res = await axios.post(
         `http://localhost:5000/api/v1/user/register`,
         user,
@@ -34,13 +40,20 @@ const Signup = () => {
           withCredentials: true,
         }
       );
+
+      // if registration is successful, redirect to login page and show success toast
+
       if(res.data.success){
-        navigate("/login")
-        toast.success(res.data.message) ; 
+        navigate("/login") // redirect to login page
+        toast.success(res.data.message) ; // show success toast
       }
     } catch (error) {
+      toast.error(error.response.data.message) ; // if an error occurs, show error toast and log error 
       console.log(error);
     }
+
+    // reset form fields after submission 
+
     setUser({
       fullName: "",
       username: "",
