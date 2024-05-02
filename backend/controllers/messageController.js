@@ -43,11 +43,13 @@ const sendMessage = async (req, res)=>{
 
         await gotConversation.save() ; // save the updated conversation 
 
+        // SOCKET.IO
+
         return res.status(201).json({
-            message: "Response sent successfully"
+            newMessage
         })
 
-        // SOCKET.IO
+        
 
     }catch(error){
         console.log(error) ; 

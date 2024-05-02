@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-export const Message = () => {
+ const Message = ({message}) => {
+  const scroll = useRef() ; 
+  useEffect(()=>{
+  scroll.current?.scrollIntoView({behaviour:"smotth"})
+  }, [message]) ; 
   return (
-    <div className="chat chat-start">
+    <div ref={scroll} className="chat chat-start">
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
@@ -14,7 +18,7 @@ export const Message = () => {
       <div className="chat-header">
         <time className="text-xs opacity-50 tet-white ">12:45</time>
       </div>
-      <div className="chat-bubble">You were the Chosen One!</div>
+      <div className="chat-bubble">{message?.message}</div>
       <div className="chat-footer opacity-50"></div>
     </div>
   );
