@@ -19,8 +19,8 @@ const MessageContainer = () => {
             </div>
           </div>
       </div>
-      <SendInput/>
       <Messages/>
+      <SendInput/>
     </div>
   );
 };
