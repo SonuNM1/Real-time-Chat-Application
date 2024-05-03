@@ -2,8 +2,8 @@
                     // Business Logic of Message 
 
 let Conversation = require("../models/conversationModel") ; 
-
 const Message = require("../models/messageModel") ; 
+import {getReceiverSocketId, io} from "../socket/socket.js" ; 
 
 // send a message from the logged-in user to a specified receiver
 
@@ -44,6 +44,12 @@ const sendMessage = async (req, res)=>{
         await gotConversation.save() ; // save the updated conversation 
 
         // SOCKET.IO
+
+        const receiverSocketId = getReceiverSocketId(receiverId) ; 
+
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage", newMessage) ; 
+        }
 
         return res.status(201).json({
             newMessage

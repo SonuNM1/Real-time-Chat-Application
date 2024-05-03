@@ -5,7 +5,7 @@ import Messages from "./Messages";
 import { setAuthUser, setSelectedUser } from "../redux/userSlice";
 
 const MessageContainer = () => {
-  const { selectedUser } = useSelector((store) => store.user);
+  const { selectedUser, authUser } = useSelector((store) => store.user);
 
   const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ const MessageContainer = () => {
         </div>
       ) : (
         <div className="md:min-2-[550px] flex flex-col justify-center items-center " >
-          <h1 className="text-4xl text-white font-bold" >Hi, {setAuthUser.fullName}</h1>
+          <h1 className="text-4xl text-white font-bold" >Hi, {authUser?.fullName}</h1>
           <h1 className="text-2xl text-white">Let's start conversation</h1>
         </div>
       )}
