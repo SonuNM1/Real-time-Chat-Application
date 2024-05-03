@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
   scroll.current?.scrollIntoView({behaviour:"smotth"})
   }, [message]) ; 
   return (
-    <div ref={scroll} className={`chat ${authUser?._id === message?.senderId ?'chat-end':'chat-start'}`}>
+    <div ref={scroll} className={`chat ${message?.senderId === authUser?._id? 'chat-end':'chat-start '}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
       <div className="chat-header">
         <time className="text-xs opacity-50 tet-white ">12:45</time>
       </div>
-      <div className="chat-bubble">{message?.message}</div>
+      <div className={`chat-bubble ${message?.senderId != authUser?._id? 'bg-gray-200 text-black':'chat-start '}`}>{message?.message}</div>
       <div className="chat-footer opacity-50"></div>
     </div>
   );

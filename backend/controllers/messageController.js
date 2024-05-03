@@ -41,7 +41,9 @@ const sendMessage = async (req, res)=>{
             gotConversation.messages.push(newMessage._id) ;
         }
 
-        await gotConversation.save() ; // save the updated conversation 
+        // save the updated conversation 
+
+        await Promise.all([gotConversation.save(), newMessage.save()]) ; 
 
         // SOCKET.IO
 
