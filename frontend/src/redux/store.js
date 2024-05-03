@@ -6,8 +6,7 @@ import socketReducer from "./socketSlice" ;
 
 // Redux persist 
 
-import {
-    persistStore, 
+import { 
     persistReducer, 
     FLUSH,
     REHYDRATE, 
